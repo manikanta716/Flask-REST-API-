@@ -4,7 +4,7 @@ A RESTful API for managing notes with full CRUD operations.
 """
 
 from flask import Flask, jsonify, request, abort
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 
 app = Flask(__name__)
@@ -78,8 +78,8 @@ def create_note():
         "title": data["title"].strip(),
         "content": data["content"].strip(),
         "tags": data.get("tags", []),
-        "created_at": datetime.utcnow().isoformat() + "Z",
-        "updated_at": datetime.utcnow().isoformat() + "Z",
+                "created_at": datetime.now(timezone.utc).isoformat() + "Z",
+                "updated_at": datetime.now(timezone.utc).isoformat() + "Z",
     }
     notes[note["id"]] = note
     return jsonify(note), 201
@@ -110,7 +110,7 @@ def replace_note(note_id: str):
         "title": data["title"].strip(),
         "content": data["content"].strip(),
         "tags": data.get("tags", []),
-        "updated_at": datetime.utcnow().isoformat() + "Z",
+                "updated_at": datetime.now(timezone.utc).isoformat() + "Z",
     })
     return jsonify(note)
 
@@ -129,7 +129,7 @@ def update_note(note_id: str):
     if "tags" in data:
         note["tags"] = data["tags"]
 
-    note["updated_at"] = datetime.utcnow().isoformat() + "Z"
+        note["updated_at"] = datetime.now(timezone.utc).isoformat() + "Z"
     return jsonify(note)
 
 
